@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas JS Matrix Filter</title>
+</head>
+<body>
+<canvas id="canvasHolder" width="640" height="480" style="background: #000"></canvas>
+
+<form enctype="multipart/form-data">
+    <input type="file" name="fileToUpload" id="fileToUpload">
+</form>
+
+<table>
+    <tr>
+        <td>Random letter opacity (from 0 to 1)</td>
+        <td><input id="randomLetterOpacity"></td>
+    </tr>
+    <tr>
+        <td>Image letter opacity (from 0 to 1)</td>
+        <td><input id="imageLetterOpacity"></td>
+    </tr>
+    <tr>
+        <td>BackGround opacity (from 0 to 1)</td>
+        <td><input id="backgroundOpacity"></td>
+    </tr>
+    <tr>
+        <td>Matrix Count</td>
+        <td><input id="matrixCount"></td>
+    </tr>
+    <tr>
+        <td>Redraw Timeout</td>
+        <td><input id="redrawTimeout"></td>
+    </tr>
+</table>
+<script>
+    var filter = filter || {};
+    (function () {
+        filter.canvasHolder = document.getElementById('canvasHolder');
+        filter.canvasContext = filter.canvasHolder.getContext('2d');
+        filter.canvasWidth = filter.canvasHolder.width;
+        filter.canvasHeight = filter.canvasHolder.height;
+        filter.cellWidth = 5;
+        filter.cellHeight = 5;
+        filter.redrawTimeOut = 30;
+        filter.rowCount = filter.canvasHeight / filter.cellHeight;
+        filter.columnCount = filter.canvasWidth / filter.cellWidth;
+        filter.imageHolder = null;
+        filter.imageMarginLeft  = null;
+        filter.imageMarginTop  = null;
+        filter.imageBrightnessMap = {};
+        filter.imageReady = false;
+        filter.matrix = {};
+        filter.matrixCount = 50;
+        filter.letterDiapasons = [
+            [0, 255]
+        ];
+        filter.lettersPalitra = {};
+        filter.canvasContext.font = "5px Arial";
+        filter.backGroundOpacity = 0.5;
+        filter.randomLetterOpacity = 0.5;
+        filter.imageLetterOpacity = 1;
+        filter.getRandomLetter = function getRandomLetter() {
+            var index;
+            index = Math.floor(Math.random() * this.letterDiapasons.length);
+            return String.fromCharCode(this.letterDiapasons[index][0] + Math.floor(Math.random() * (this.letterDiapasons[index][1] - this.letterDiapasons[index][0])));
+        }
+        filter.drawBackGround = function () {
+            var imageData;
+            imageData = this.canvasContext.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
+            for(var i = 0; i < imageData.data.length; i+=4){
+                imageData.data[i+3] = this.backGroundOpacity * imageData.data[i+3];
+            }
+            this.canvasContext.putImageData(imageData, 0, 0);
+        }
+        filter.getBrightnessForPalitra = function (imageData) {
+            var brightness = 0;
+            for (var z = 0; z < imageData.data.length; z += 4) {
+                if (imageData.data[z] != 0 || imageData.data[z + 1] != 0 || imageData.data[z + 2] != 0) {
+                    brightness++;
+                }
+            }
+            return brightness / 100;
+        }
+        filter.getAverageBrightnessFromImageData = function (imageData) {
+            var tempBrightnessCollection = [],
+                maxBrightness = 3 * 255;
+            for (var z = 0; z < imageData.data.length; z += 4) {
+                tempBrightnessCollection.push((imageData.data[z] + imageData.data[z + 1] + imageData.data[z + 2]) / maxBrightness);
+            }
+            return tempBrightnessCollection.reduce(function (previousValue, currentValue, index, array) {
+                return previousValue + currentValue;
+            }) / tempBrightnessCollection.length;
+        }
+        filter.isPositionInImage = function(x, y){
+            return x > this.imageMarginLeft + this.cellWidth
+                &&
+                y > this.imageMarginTop + this.cellHeight
+                &&
+                x + this.cellWidth < this.imageMarginLeft + this.imageHolder.width
+                &&
+                y + this.cellHeight < this.imageMarginTop + this.imageHolder.height;
+        }
+        filter.getLetterFromPalitraByImage = function (x, y) {
+            var imageData,
+                brightness,
+                letter,
+                tempFoundBrightness;
+            if (this.imageReady && this.imageHolder && this.isPositionInImage(x, y)) {
+                brightness = this.imageBrightnessMap[x][y];
+                for (var brightnessKey in this.lettersPalitra) {
+                    if (!tempFoundBrightness) {
+                        tempFoundBrightness = brightnessKey;
+                    } else if (Math.abs(brightness - brightnessKey) < Math.abs(brightness - tempFoundBrightness)) {
+                        tempFoundBrightness = brightnessKey;
+                    }
+                }
+                letter = this.lettersPalitra[tempFoundBrightness];
+                return letter;
+            }
+            return null;
+        }
+        filter.prepareLetterPalitra = function () {
+            var imageData,
+                lettersCount = 0,
+                letter,
+                brightnessRelative,
+                minBrightness = 1,
+                maxBrightness = 0,
+                tempPalitra = {};
+            this.canvasContext.globalCompositeOperation = 'source-over';
+            this.canvasContext.globalAlpha = 1;
+            this.canvasContext.fillStyle = 'white';
+            for (var i in this.letterDiapasons) {
+                for (var key = this.letterDiapasons[i][0]; key < this.letterDiapasons[i][1]; key++) {
+                    letter = String.fromCharCode(key);
+                    this.canvasContext.clearRect(0, 0, 2 * this.cellWidth, 2 * this.cellHeight);
+                    this.canvasContext.fillText(letter, 0, this.cellHeight);
+                    imageData = this.canvasContext.getImageData(0, 0, this.cellWidth, this.cellHeight);
+                    brightnessAbsolute = this.getBrightnessForPalitra(imageData);
+                    minBrightness = Math.min(brightnessAbsolute, minBrightness);
+                    maxBrightness = Math.max(brightnessAbsolute, maxBrightness);
+                    tempPalitra[brightnessAbsolute] = letter;
+                    lettersCount++;
+                }
+            }
+            this.canvasContext.clearRect(0, 0, 2 * this.cellWidth, 2 * this.cellHeight);
+            for (var brightnessAbsolute in tempPalitra) {
+                brightnessRelative = (brightnessAbsolute - minBrightness) / (maxBrightness - minBrightness);
+                this.lettersPalitra[brightnessRelative] = tempPalitra[brightnessAbsolute];
+            }
+        }
+        filter.drawLetters = function () {
+            var x,
+                y,
+                currentMatrix,
+                matrixCell,
+                letter;
+            this.canvasContext.fillStyle = 'green';
+            this.canvasContext.globalCompositeOperation = 'source-over';
+            for (var i = 0; i < this.matrixCount; i++) {
+                if (!this.matrix.hasOwnProperty(i)) {
+                    this.matrix[i] = {};
+                }
+                currentMatrix = this.matrix[i];
+                for (var columnIndex = 0; columnIndex < this.columnCount; columnIndex++) {
+                    if (!currentMatrix.hasOwnProperty(columnIndex)) {
+                        currentMatrix[columnIndex] = {};
+                    }
+                    matrixCell = currentMatrix[columnIndex];
+                    if (!matrixCell.rowIndex) {
+                        matrixCell.rowIndex = Math.floor(Math.random() * this.rowCount);
+                    }
+                    if (matrixCell.rowIndex > this.rowCount) {
+                        matrixCell.rowIndex = 0;
+                    }
+                    if (Math.random() > 0.666) {
+                        continue;
+                    }
+                    x = columnIndex * this.cellWidth;
+                    y = matrixCell.rowIndex * this.cellHeight;
+                    this.canvasContext.globalAlpha = this.imageLetterOpacity;
+                    letter = this.getLetterFromPalitraByImage(x, y);
+                    if (!letter) {
+                        this.canvasContext.globalAlpha = this.randomLetterOpacity;
+                        letter = this.getRandomLetter();
+                    }
+                    this.canvasContext.fillText(letter, x, y);
+                    matrixCell.rowIndex++;
+                }
+            }
+        }
+        filter.drawImage = function () {
+            var proportion,
+                x,
+                y,
+                tempImageData,
+                brightnessAbsolute;
+            this.imageBrightnessMap = {};
+            if (this.imageHolder.width > this.canvasWidth || this.imageHolder.height > this.canvasHeight) {
+                if (this.imageHolder.width > this.canvasWidth) {
+                    proportion = this.imageHolder.width / this.canvasWidth;
+                }
+                if (this.imageHolder.height > this.canvasHeight) {
+                    proportion = proportion > this.imageHolder.height / this.canvasHeight ? proportion : this.imageHolder.height / this.canvasHeight;
+                }
+                this.imageHolder.width = this.imageHolder.width / proportion;
+                this.imageHolder.height = this.imageHolder.height / proportion;
+            }
+            this.imageMarginTop = (this.canvasHeight - this.imageHolder.height) / 2;
+            this.imageMarginLeft = (this.canvasWidth - this.imageHolder.width) / 2;
+            this.canvasContext.save();
+            this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            this.canvasContext.drawImage(this.imageHolder, this.imageMarginLeft, this.imageMarginTop, this.imageHolder.width, this.imageHolder.height);
+            for(x = 0; x < this.canvasWidth; x += this.cellWidth){
+                for(y = 0; y < this.canvasHeight; y += this.cellHeight){
+                    if(this.isPositionInImage(x, y)){
+                        tempImageData = this.canvasContext.getImageData(x, y, this.cellWidth, this.cellHeight);
+                        brightnessAbsolute = this.getAverageBrightnessFromImageData(tempImageData);
+                        if(!this.imageBrightnessMap.hasOwnProperty(x)){
+                            this.imageBrightnessMap[x] = {};
+                        }
+                        this.imageBrightnessMap[x][y] = brightnessAbsolute;
+                    }
+                }
+            }
+            this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            this.canvasContext.restore();
+            this.imageReady = true;
+        }
+        filter.draw = function () {
+            var me = this;
+            this.drawBackGround();
+            this.drawLetters();
+            setTimeout(function () {
+                me.draw();
+            }, this.redrawTimeOut);
+        }
+        document.getElementById('fileToUpload').addEventListener('change', function () {
+            filter.imageReady = false;
+            filter.imageHolder = new Image();
+            filter.imageHolder.onload = function () {
+                filter.drawImage();
+            };
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    filter.imageHolder.src = e.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        }, false);
+        document.getElementById('backgroundOpacity').value = filter.backGroundOpacity;
+        document.getElementById('backgroundOpacity').addEventListener('change', function () {
+            filter.backGroundOpacity = this.value;
+        }, false);
+        document.getElementById('randomLetterOpacity').value = filter.randomLetterOpacity;
+        document.getElementById('randomLetterOpacity').addEventListener('change', function () {
+            filter.randomLetterOpacity = this.value;
+        }, false);
+        document.getElementById('imageLetterOpacity').value = filter.imageLetterOpacity;
+        document.getElementById('imageLetterOpacity').addEventListener('change', function () {
+            filter.imageLetterOpacity = this.value;
+        }, false);
+        document.getElementById('matrixCount').value = filter.matrixCount;
+        document.getElementById('matrixCount').addEventListener('change', function () {
+            filter.matrixCount = this.value;
+        }, false);
+        document.getElementById('redrawTimeout').value = filter.redrawTimeOut;
+        document.getElementById('redrawTimeout').addEventListener('change', function () {
+            filter.redrawTimeOut = this.value;
+        }, false);
+        filter.prepareLetterPalitra();
+        filter.draw();
+    })();
+</script>
+</body>
+</html>

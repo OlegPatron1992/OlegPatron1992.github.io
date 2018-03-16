@@ -1,25 +1,47 @@
 <html>
 <head>
-    <link rel="stylesheet" href="./src/bitcoin/btcdonate.css">
-    <link rel="stylesheet" href="./src/dist/styles.css">
-    <title>Donate to OlegPatron1992</title>
+    <link href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./lib/bitcoin/btcdonate.css" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
+    <title>OlegPatron1992 Github page</title>
 </head>
 <body>
 
-<div class="content">
-    <h1>Donate to <a href="https://github.com/olegpatron1992">OlegPatron1992</a></h1>
+<div class="container">
+    <div class="col-sm-6 col-sm-offset-3 section">
+        <h2><a href="https://github.com/olegpatron1992">OlegPatron1992</a> Github Page</h2>
 
-    <p>Just give me <a href="https://blockchain.info/payment_request?address=1NNxtEBJfX61BKaSphVkzXCPcSRHdaaffV"
-                       data-btcaddress="1NNxtEBJfX61BKaSphVkzXCPcSRHdaaffV?amount=0.01">a cap of tea</a>=)</p>
-    <small>Thanks in advance!</small>
+        <strong>Wanna donate?</strong>
+        <p>Just give me <a href="https://blockchain.info/payment_request?address=1NNxtEBJfX61BKaSphVkzXCPcSRHdaaffV"
+                           data-btcaddress="1NNxtEBJfX61BKaSphVkzXCPcSRHdaaffV?amount=0.01">a cap of tea</a>=)</p>
+        <small>Thanks in advance!</small>
 
-    <p>Have a question? <a href="mailto:olegpatron1992@gmail.com">Write me a letter</a>.</p>
+        <p>Have a question? <a href="mailto:olegpatron1992@gmail.com">Write me a letter</a>.</p>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 section">
+        <h2>Recent projects:</h2>
+        <div class="row">
+            <div class="col-sm-6">
+                <a href="https://game-boxing.bitballoon.com" target="_blank">
+                    <span class="h4">HTML5 Game Boxing</span>
+                    <img class="img-thumbnail" src="./img/boxing.png"/>
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <a href="https://screensaver-matrix.bitballoon.com" target="_blank">
+                    <span class="h4">HTML5 Screensaver Matrix</span>
+                    <img class="img-thumbnail" src="./img/matrix.png"/>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script type="text/javascript" src="./src/jquery/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="./src/jquery/jquery.qrcode-0.7.0.min.js"></script>
-<script type="text/javascript" src="./src/bitcoin/btcdonate.js"></script>
-<script>
+<script type="text/javascript" src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./lib/jquery/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="./lib/jquery/jquery.qrcode-0.7.0.min.js"></script>
+<script type="text/javascript" src="./lib/bitcoin/btcdonate.js"></script>
+<script type="text/javascript">
     btcdonate();
 </script>
 

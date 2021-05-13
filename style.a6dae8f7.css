@@ -11187,5 +11187,85 @@ header .navbar .navbar-collapse .menu-container .menu-row {
   justify-content: center;
   align-content: center;
 }
+.content .screen-8 .grid-container .area.screen-content .inner {
+  border-radius: 30px;
+  padding: 10px;
+}
+.content .screen-8 .grid-container .area.screen-content .inner.inner-1 {
+  background-color: rgba(255, 245, 165, 0.5);
+}
+.content .screen-8 .grid-container .area.screen-content .inner.inner-2 {
+  background-color: rgba(255, 245, 165, 0.65);
+}
+.content .screen-8 .grid-container .area.screen-content .inner.inner-3 {
+  background-color: rgba(255, 245, 165, 0.75);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+.content .screen-8 .grid-container .area.screen-content .title {
+  font-family: "Peace Sans", sans-serif;
+  font-size: 60px;
+  line-height: 83px;
+  text-align: center;
+  color: #FB5B00;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-top: -60px;
+  text-transform: uppercase;
+}
+@supports (-webkit-text-stroke: 1px white) {
+  .content .screen-8 .grid-container .area.screen-content .title {
+    -webkit-text-stroke: 1px white;
+  }
+}
+.content .screen-8 .grid-container .area.screen-content .sub-title {
+  font-family: "Peace Sans", sans-serif;
+  font-size: 30px;
+  line-height: 42px;
+  text-align: center;
+  color: #FB5B00;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+}
+@supports (-webkit-text-stroke: 1px white) {
+  .content .screen-8 .grid-container .area.screen-content .sub-title {
+    -webkit-text-stroke: 1px white;
+  }
+}
+.content .screen-8 .grid-container .area.screen-content .just-another-one-title {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 30px;
+  text-align: center;
+}
+.content .screen-8 .grid-container .area.screen-content .just-another-one-title .highlighted {
+  color: #FB5B00;
+  text-decoration: underline;
+}
+.content .screen-8 .grid-container .area.screen-content .rules-title {
+  font-family: "Peace Sans", sans-serif;
+  font-size: 30px;
+  line-height: 30px;
+  color: #00AE90;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+@supports (-webkit-text-stroke: 1px white) {
+  .content .screen-8 .grid-container .area.screen-content .rules-title {
+    -webkit-text-stroke: 1px white;
+  }
+}
+.content .screen-8 .grid-container .area.screen-content .badges {
+  margin-top: 20px;
+}
+.content .screen-8 .grid-container .area.screen-content .badges .badge {
+  background-image: url("/badge.ebadcbab.svg");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: contain;
+  min-height: 200px;
+}
 
 /*# sourceMappingURL=/style.a6dae8f7.css.map */

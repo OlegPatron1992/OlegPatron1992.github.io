@@ -19139,7 +19139,7 @@ var showSome = function showSome() {
 };
 
 showSome(7);
-(0, _jquery.default)('.screen').on('click', function () {
+(0, _jquery.default)('.screen').on('dblclick', function () {
   var screen = (0, _jquery.default)(this);
 
   if (screen.next().length) {
@@ -19177,7 +19177,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40967" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37051" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

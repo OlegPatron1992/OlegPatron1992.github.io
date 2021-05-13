@@ -10741,24 +10741,24 @@ textarea.form-control-lg {
   font-family: "Roboto Condensed";
   src: url("/Roboto-Bold.335e2e5e.ttf");
 }
+@font-face {
+  font-family: "Roboto";
+  src: url("/Roboto-Medium.7e19ad06.ttf");
+}
 .collapsing {
   -webkit-transition: none;
   transition: none;
 }
 
-html {
-  width: 100vw;
-  height: 100vh;
+html, body {
+  width: 100%;
+  height: 100%;
 }
 
-body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
 body.intro {
   background: url("/background.7441b923.png");
   background-position: center center;
+  background-size: cover;
 }
 @media (max-width: 767.98px) {
   body.menu-opened .content {
@@ -10808,7 +10808,8 @@ header .navbar .navbar-collapse .menu-container .menu-row {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button {
+
+.menu-container .menu-button {
   background-color: transparent;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -10817,31 +10818,31 @@ header .navbar .navbar-collapse .menu-container .menu-row .menu-button {
   width: 3rem;
   height: 3rem;
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.home {
+.menu-container .menu-button.home {
   background-image: url("/home.ea654838.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.gps {
+.menu-container .menu-button.gps {
   background-image: url("/gps.8cc7f78a.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.batman {
+.menu-container .menu-button.batman {
   background-image: url("/batman.e48374b9.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.gym {
+.menu-container .menu-button.gym {
   background-image: url("/gym.10492abb.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.horse {
+.menu-container .menu-button.horse {
   background-image: url("/horse.d89d413c.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.castle {
+.menu-container .menu-button.castle {
   background-image: url("/castle.8337acad.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.girl {
+.menu-container .menu-button.girl {
   background-image: url("/girl.06488ff7.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.account {
+.menu-container .menu-button.account {
   background-image: url("/account.c840a8ad.svg");
 }
-header .navbar .navbar-collapse .menu-container .menu-row .menu-button.rocket {
+.menu-container .menu-button.rocket {
   background-image: url("/rocket.249beaae.svg");
 }
 
@@ -10895,8 +10896,14 @@ header .navbar .navbar-collapse .menu-container .menu-row .menu-button.rocket {
   height: 100%;
 }
 .content .screen {
+  position: relative;
   width: 100%;
   height: 100%;
+}
+.content .screen.no-scroll {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 .content .screen.screen-with-man {
   background-image: url("/man.3ffb0407.png");
@@ -11103,6 +11110,82 @@ header .navbar .navbar-collapse .menu-container .menu-row .menu-button.rocket {
   font-size: 1.5vmin;
   padding-bottom: 7vmin;
   padding-right: 5vmin;
+}
+.content .screen-8 {
+  background-image: url("/background.267bf9bd.jpg");
+  background-position: center;
+  background-size: cover;
+}
+.content .screen-8 .grid-container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas: "menu screen-content screen-content screen-content screen-content screen-content ." "menu screen-content screen-content screen-content screen-content screen-content help-text" "menu screen-content screen-content screen-content screen-content screen-content man";
+}
+.content .screen-8 .grid-container .area.man {
+  position: relative;
+  grid-area: man;
+}
+.content .screen-8 .grid-container .area.man img.man-illustrated {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 150%;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.content .screen-8 .grid-container .area.help-text {
+  position: relative;
+  grid-area: help-text;
+}
+.content .screen-8 .grid-container .area.help-text .thinking-cloud {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  height: auto;
+  font-size: 12px;
+  line-height: 18px;
+  padding-top: 60px;
+  padding-bottom: 100px;
+  padding-right: 60px;
+  padding-left: 60px;
+  margin-bottom: 50%;
+  background-image: url("/thinking-cloud.a421781f.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.content .screen-8 .grid-container .area.menu {
+  grid-area: menu;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+.content .screen-8 .grid-container .area.menu .menu-button {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  width: 2rem;
+  height: 2rem;
+}
+.content .screen-8 .grid-container .area.menu .menu-button.active {
+  width: 3rem;
+  height: 3rem;
+}
+.content .screen-8 .grid-container .area.screen-content {
+  grid-area: screen-content;
+  padding-right: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
 /*# sourceMappingURL=/style.a6dae8f7.css.map */

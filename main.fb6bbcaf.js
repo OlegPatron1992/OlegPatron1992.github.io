@@ -19127,17 +19127,24 @@ mainMenuEl.addEventListener('hidden.bs.collapse', function (event) {
 
 var showSome = function showSome() {
   var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+  if (index >= 0 && index < 7) {
+    (0, _jquery.default)('body').addClass('intro');
+  } else {
+    (0, _jquery.default)('body').removeClass('intro');
+  }
+
   (0, _jquery.default)('.screen').hide();
   (0, _jquery.default)((0, _jquery.default)('.screen').get(index)).show();
 };
 
-showSome(0);
-(0, _jquery.default)('button.btn-continue').on('click', function () {
-  var screen = (0, _jquery.default)(this).parents('.screen');
-  screen.hide();
+showSome(7);
+(0, _jquery.default)('.screen').on('click', function () {
+  var screen = (0, _jquery.default)(this);
 
   if (screen.next().length) {
-    screen.next().show();
+    var index = (0, _jquery.default)('.content .screen').index(screen);
+    showSome(index + 1);
   } else {
     showSome();
   }
@@ -19170,7 +19177,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44855" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40967" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

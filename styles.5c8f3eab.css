@@ -10795,19 +10795,19 @@ textarea.form-control-lg {
 
 @font-face {
   font-family: "Peace Sans";
-  src: url("/Peace Sans.708893ca.otf");
+  src: url("/Peace Sans Webfont.f0555f13.ttf") format("truetype");
 }
 @font-face {
   font-family: "Comic Sans";
-  src: url("/Comic Sans MS.80d371ad.ttf");
+  src: url("/Comic Sans MS.80d371ad.ttf") format("truetype");
 }
 @font-face {
   font-family: "Roboto Condensed";
-  src: url("/Roboto-Bold.335e2e5e.ttf");
+  src: url("/Roboto-Bold.335e2e5e.ttf") format("truetype");
 }
 @font-face {
   font-family: "Roboto";
-  src: url("/Roboto-Medium.7e19ad06.ttf");
+  src: url("/Roboto-Medium.7e19ad06.ttf") format("truetype");
 }
 .menu-container {
   display: flex;
